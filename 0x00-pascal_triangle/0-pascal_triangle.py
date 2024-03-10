@@ -1,12 +1,16 @@
+#!/usr/bin/python3
+""" pascal triangle"""
+
+
 def pascal_triangle(n):
     """
     A function that generates pascal triangle to given n rows
-    
+
     args:
         n: number of rows to generate pascal triangle
     Return: A list of lists representing pascal triangle
     """
-    
+
     if n <= 0:
         return []
 
