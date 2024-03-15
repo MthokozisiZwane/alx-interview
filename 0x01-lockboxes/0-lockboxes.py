@@ -1,9 +1,17 @@
 #!/usr/bin/python3
+"""
+function that determines if boxes are locked
+"""
+
 
 from collections import deque
 
 
 def canUnlockAll(boxes):
+    """
+    determines if boxes are locked
+    """
+
     n = len(boxes)
     visited_boxes = [False] * n
     visited_boxes[0] = True
