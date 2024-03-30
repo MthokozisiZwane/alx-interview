@@ -5,6 +5,7 @@ Reads stdin line by line and computes metrics
 
 import sys
 
+
 def print_stats(total_size, status_codes):
     """
     Prints the total file size and the count of each status code.
@@ -13,6 +14,7 @@ def print_stats(total_size, status_codes):
     for code, count in sorted(status_codes.items()):
         if count:
             print("{}: {}".format(code, count))
+
 
 def parse_line(line, total_size, status_codes):
     """
@@ -25,6 +27,7 @@ def parse_line(line, total_size, status_codes):
             total_size += int(parts[-1])
             status_codes[status_code] = status_codes.get(status_code, 0) + 1
     return total_size, status_codes
+
 
 def main():
     """
@@ -47,6 +50,6 @@ def main():
 
         pass
 
+
 if __name__ == "__main__":
     main()
-
