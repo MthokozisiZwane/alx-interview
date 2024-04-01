@@ -19,6 +19,7 @@ def parse_log_line(line):
     except (IndexError, ValueError):
         return None, None
 
+
 def print_statistics(total_file_size, status_code_counts):
     """
     Prints total file size and number of lines by status code.
@@ -27,6 +28,7 @@ def print_statistics(total_file_size, status_code_counts):
     for code in sorted(status_code_counts.keys()):
         if code in [200, 301, 400, 401, 403, 404, 405, 500]:
             print("{}: {}".format(code, status_code_counts[code]))
+
 
 def main():
     """
@@ -52,6 +54,7 @@ def main():
     except KeyboardInterrupt:
         print_statistics(total_file_size, status_code_counts)
         raise
+
 
 if __name__ == "__main__":
     main()
