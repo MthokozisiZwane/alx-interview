@@ -1,59 +1,65 @@
 #!/usr/bin/python3
-"""
-module for log parsing
-"""
-
 import sys
 
 
-def parse_log_line(line):
+def print_stats(total_size, status_codes):
     """
-    Parses a log line and extracts status code and file size.
-    Returns a tuple (status_code, file_size).
+    Print the computed statistics including total file size and counts
+    of different status codes.
+
+    Args:
+        total_size (int): Total size of files processed.
+        status_codes (dict): Dictionary containing counts of
+        different status codes.
     """
-    try:
-        parts = line.split()
-        status_code = int(parts[-2])
-        file_size = int(parts[-1])
-        return status_code, file_size
-    except (IndexError, ValueError):
-        return None, None
+    print("File size: {}".format(total_size))
+    for code in sorted(status_codes.keys()):
+        print("{}: {}".format(code, status_codes[code]))
 
 
-def print_statistics(total_file_size, status_code_counts):
+def parse_line(line):
     """
-    Prints total file size and number of lines by status code.
+    Parses a line of input to extract status code and file size.
+
+    Args:
+        line (str): A line of input to parse.
+
+    Returns:
+        int, int: Tuple containing status code and file size if
+        parsing is successful, else (None, None).
     """
-    print("File size: {}".format(total_file_size))
-    for code in sorted(status_code_counts.keys()):
-        if code in [200, 301, 400, 401, 403, 404, 405, 500]:
-            print("{}: {}".format(code, status_code_counts[code]))
+    parts = line.split()
+    if len(parts) >= 9:
+        status_code = parts[-2]
+        file_size = parts[-1]
+        if status_code.isdigit():
+            return int(status_code), int(file_size)
+    return None, None
 
 
 def main():
     """
-    main func
+    Main function to read input, compute statistics, and print them.
     """
-
-    total_file_size = 0
-    status_code_counts = {}
+    total_size = 0
+    status_codes = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0,
+                    405: 0, 500: 0}
+    lines_processed = 0
 
     try:
-        line_num = 0
         for line in sys.stdin:
-            line = line.strip()
-            status_code, file_size = parse_log_line(line)
-            if status_code is not None:
-                total_file_size += file_size
-                status_code_counts[status_code] = status_code_counts.get(
-                        status_code, 0) + 1
+            status_code, file_size = parse_line(line.strip())
+            if status_code is not None and file_size is not None:
+                total_size += file_size
+                status_codes[status_code] += 1
+                lines_processed += 1
 
-            line_num += 1
-            if line_num % 10 == 0:
-                print_statistics(total_file_size, status_code_counts)
+            if lines_processed % 10 == 0:
+                print_stats(total_size, status_codes)
+
     except KeyboardInterrupt:
-        print_statistics(total_file_size, status_code_counts)
-        raise
+        print_stats(total_size, status_codes)
+        sys.exit(0)
 
 
 if __name__ == "__main__":
