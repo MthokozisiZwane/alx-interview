@@ -9,7 +9,7 @@ import sys
 
 def is_safe(board, row, col):
     """
-    Checks if placing a queen at a (row, col) is safe.
+    Checks if placing a queen at aa (row, col) is safe.
     """
     for i in range(row):
         if board[i] == col:
