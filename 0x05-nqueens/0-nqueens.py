@@ -56,7 +56,12 @@ def print_solution(solution):
     """
     Function to print a single solution.
     """
-    print(solution)
+    print("[", end="")
+    for i in range(len(solution)):
+        if i > 0:
+            print(", ", end="")
+        print("[{}, {}]".format(i, solution[i]), end="")
+    print("]")
 
 
 if __name__ == "__main__":
