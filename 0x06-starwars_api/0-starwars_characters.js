@@ -1,57 +1,32 @@
 #!/usr/bin/node
+/**
+ * Prints all characters of a Star Wars movie
+ * The first positional argument passed is the Movie ID
+ * Display one character name per line in the same order
+ * as the chars list in the /films/ endpoint
+ */
 
-// Import the 'request' module for making HTTP requests
 const request = require('request');
+const movieId = process.argv[2] + '/';
+const apiURL = 'https://swapi-api.hbtn.io/api/films/';
+// Makes API request, sets async to allow await promise
+request(apiURL + movieId, async (err, res, body) => {
+  if (err) return console.error(err);
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+  // finds URL of each character in the film
+  const  filmData = JSON.parse(body).characters;
 
-// Extract the movie ID from the command-line arguments
-const movieId = process.argv[2];
+  // Use URL list to make requests
+  // await queues requests until they resolve
+  for (const characterUrl of  filmData) {
+    await new Promise((resolve, reject) => {
+      request(characterUrl, (err, res, body) => {
+        if (err) return console.error(err);
 
-// Check if the movie ID is provided as a command-line argument
-if (!movieId) {
-  console.error('Usage: ./0-starwars_characters.js <Movie ID>');
-  process.exit(1);
-}
-
-// Construct the API URL for fetching movie data based on the provided movie ID
-const apiUrl = `https://swapi.dev/api/films/${movieId}/`;
-
-// Make an HTTP GET request to the Star Wars API endpoint for the specified movie
-request(apiUrl, (error, response, body) => {
-  // Check for errors during the request
-  if (error) {
-    console.error('Error:', error);
-    return;
-  }
-
-  // Check for unexpected status codes
-  if (response.statusCode !== 200) {
-    console.error('Unexpected status code:', response.statusCode);
-    return;
-  }
-
-  // Parse the JSON data returned by the API
-  const filmData = JSON.parse(body);
-
-  // Extract the list of characters from the movie data
-  const characters = filmData.characters;
-
-  // Iterate over the list of character URLs
-  characters.forEach(characterUrl => {
-    // Make an HTTP GET request to fetch character data
-    request(characterUrl, (error, response, body) => {
-      // Check for errors during the request
-      if (error) {
-        console.error('Error:', error);
-        return;
-      }
-
-      // Parse the JSON data returned by the API
-      const characterData = JSON.parse(body);
-
-      // Print the name of the character to the console
-      console.log(characterData.name);
+        // finds each character name and prints in URL order
+        console.log(JSON.parse(body).name);
+        resolve();
+      });
     });
-  });
+  }
 });
