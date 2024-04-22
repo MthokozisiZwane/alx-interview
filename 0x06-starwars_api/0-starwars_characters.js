@@ -14,11 +14,11 @@ request(apiURL + movieId, async (err, res, body) => {
   if (err) return console.error(err);
 
   // finds URL of each character in the film
-  const  filmData = JSON.parse(body).characters;
+  const filmData = JSON.parse(body).characters;
 
   // Use URL list to make requests
   // await queues requests until they resolve
-  for (const characterUrl of  filmData) {
+  for (const characterUrl of filmData) {
     await new Promise((resolve, reject) => {
       request(characterUrl, (err, res, body) => {
         if (err) return console.error(err);
