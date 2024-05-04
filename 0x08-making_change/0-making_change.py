@@ -2,6 +2,7 @@
 """
 Module for making change.
 """
+import math
 
 
 def makeChange(coins, total):
@@ -19,12 +20,12 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
 
-    list_coins = [float('inf')] * (total + 1)
-    list_coins[0] = 0
+    min_coins_n = [math.inf] * (total + 1)
+    min_coins_n[0] = 0
 
     for coin in coins:
         for amount in range(coin, total + 1):
-            list_coins[amount] = min(list_coins[amount], list_coins[amount
-                                     - coin] + 1)
+            min_coins_n[amount] = min(min_coins_n[amount],
+                                      min_coins_n[amount - coin] + 1)
 
-    return list_coins[total] if list_coins[total] != float('inf') else -1
+    return min_coins_n[total] if min_coins_n[total] != math.inf else -1
