@@ -3,10 +3,9 @@
 
 def sieve_of_eratosthenes(max_n):
     """ Generates a list of primes up to max_n using the
-    Sieve of Eratosthenes
-    """
+    Sieve of Eratosthenes """
     is_prime = [True] * (max_n + 1)
-    is_prime[0], is_prime[1] = False, False
+    is_prime[0], is_prime[1] = False, False  # 0 and 1 are not prime numbers
     p = 2
     while p * p <= max_n:
         if is_prime[p]:
@@ -17,30 +16,29 @@ def sieve_of_eratosthenes(max_n):
     return primes, is_prime
 
 
-def calculate_winning_positions(max_n, primes, is_prime):
-    """ Calculate winning positions for each number of primes up to max_n """
-    winning = [False] * (max_n + 1)
-    for num in range(2, max_n + 1):
-        for prime in primes:
-            if prime > num:
-                break
-            if not winning[num - prime]:
-                winning[num] = True
-                break
-    return winning
-
-
 def isWinner(x, nums):
-    """ count player wins"""
+    """
+    Determine the winner
+    """
+    if x < 1 or not nums:
+        return None
+
     max_n = max(nums)
     primes, is_prime = sieve_of_eratosthenes(max_n)
-    winning = calculate_winning_positions(max_n, primes, is_prime)
 
     maria_wins = 0
     ben_wins = 0
 
     for n in nums:
-        if winning[n]:
+        if n < 2:
+            ben_wins += 1
+            continue
+
+        primes_count = [0] * (n + 1)
+        for i in range(1, n + 1):
+            primes_count[i] = primes_count[i - 1] + (1 if is_prime[i] else 0)
+
+        if primes_count[n] % 2 == 1:
             maria_wins += 1
         else:
             ben_wins += 1
