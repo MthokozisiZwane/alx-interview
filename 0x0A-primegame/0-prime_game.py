@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+Module for determining the winner where a prime nmber
+along with its multiples are removed from the board
+"""
 
 
 def sieve_of_eratosthenes(max_n):
