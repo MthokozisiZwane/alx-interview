@@ -6,7 +6,9 @@ multiples are removed from set one player at a time.
 
 
 def isWinner(x, nums):
+    """ function to determine winner"""
     def sieve_of_eratosthenes(n):
+        """ function to loop through prime numbers"""
         prime_numb = [True] * (n + 1)
         prime_numb[0] = prime_numb[1] = False
         p = 2
@@ -18,6 +20,8 @@ def isWinner(x, nums):
         return [p for p in range(2, n + 1) if prime_numb[p]]
 
     def is_prime(n):
+        """ determines if number is prime
+        """
         if n < 2:
             return False
         for p in range(2, int(n ** 0.5) + 1):
@@ -26,6 +30,9 @@ def isWinner(x, nums):
         return True
 
     def play_game(n):
+        """
+        function to play the game
+        """
         prime_numb = sieve_of_eratosthenes(n)
         remaining = set(range(1, n + 1))
         winner = None
